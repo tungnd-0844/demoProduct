@@ -2,7 +2,16 @@ import axios from "axios";
 const MOVIE_PATH = "https://api.themoviedb.org/3/movie/";
 const API_KEY = "3956f50a726a2f785334c24759b97dc6";
 
-const fetchMovie = page => {
+const fetchMovie = () => {
+  return axios
+    .get(MOVIE_PATH + `popular?api_key=${API_KEY}&page=1`)
+    .then(response => response.data.results)
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+const fetchLoadMoreMovie = page => {
   return axios
     .get(MOVIE_PATH + `popular?api_key=${API_KEY}&page=${page}`)
     .then(response => response.data.results)
@@ -22,5 +31,6 @@ const fetchCastMovie = movieId => {
 
 export const APIs = {
   fetchMovie,
-  fetchCastMovie
+  fetchCastMovie,
+  fetchLoadMoreMovie
 };

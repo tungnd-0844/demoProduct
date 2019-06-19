@@ -4,12 +4,14 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
+  RefreshControl
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import { connect } from "react-redux";
-import { fetch_movie } from "../actions";
+import { fetch_movie, fetch_loadmore, fetch_refresh } from "../actions";
 import ItemMovieComponent from "./ItemMovieComponent";
 
 class MovieComponent extends Component {
@@ -23,36 +25,63 @@ class MovieComponent extends Component {
     this.props.navigation.navigate("Detail", { ITEM_MOVIE: movie });
   };
 
+  _hanlderLoadMore = page => {
+    this.props.fetch_loadmore(page);
+  };
+
+  _renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    //if (!this.props.dataMovie.isLoadmore) return null;
+    return <ActivityIndicator style={{ color: "#000" }} size={"large"} />;
+  };
+
   render() {
     const { dataMovie } = this.props;
     console.log(dataMovie);
-
     return (
       <View style={styles.container}>
-        <View>
-          <Icon
-            name="ios-information-circle"
-            size={50}
-            color="black"
-            style={styles.info}
+        {dataMovie.isFetching ? (
+          <ActivityIndicator
+            size="large"
+            style={{ justifyContent: "center", alignItems: "center", flex: 1 }}
           />
-          <View style={styles.containerInfor}>
-            <Text style={styles.textInfo}>Information</Text>
+        ) : (
+          <View style={styles.container}>
+            <View>
+              <Image
+                source={require("../image/icon.png")}
+                style={styles.info}
+              />
+              <View style={styles.containerInfor}>
+                <Text style={styles.textInfo}>Information</Text>
+              </View>
+            </View>
+            <FlatList
+              data={dataMovie.data}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => this._hanlderDetailNavigator(item)}
+                  >
+                    <ItemMovieComponent item={item} index={index} />
+                  </TouchableOpacity>
+                );
+              }}
+              onEndReachedThreshold={0.4}
+              onEndReached={() =>
+                this._hanlderLoadMore(this.props.dataMovie.page)
+              }
+              keyExtractor={({ id }, index) => index.toString()}
+              ListFooterComponent={() => this._renderFooter()}
+              refreshControl={
+                <RefreshControl
+                  onRefresh={() => this.props.fetch_refresh()}
+                  refreshing={dataMovie.isRefreshing}
+                />
+              }
+            />
           </View>
-        </View>
-        <FlatList
-          data={dataMovie.data}
-          renderItem={({ item, index }) => {
-            return (
-              <TouchableOpacity
-                onPress={() => this._hanlderDetailNavigator(item)}
-              >
-                <ItemMovieComponent item={item} index={index} />
-              </TouchableOpacity>
-            );
-          }}
-          keyExtractor={({ id }, index) => index.toString()}
-        />
+        )}
       </View>
     );
   }
@@ -68,6 +97,8 @@ const styles = StyleSheet.create({
     margin: 16
   },
   info: {
+    height: 44,
+    width: 44,
     margin: 8,
     position: "absolute"
   },
@@ -85,7 +116,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetch_movie: page => dispatch(fetch_movie(page))
+    fetch_movie: page => dispatch(fetch_movie(page)),
+    fetch_loadmore: page => dispatch(fetch_loadmore(page)),
+    fetch_refresh: () => dispatch(fetch_refresh())
   };
 };
 

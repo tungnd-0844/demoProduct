@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   textName: {
     color: "white",
     fontSize: 14,
-    margin: 6
+    marginLeft: 6
   },
   textJob: {
     color: "white",
