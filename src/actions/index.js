@@ -2,7 +2,11 @@ import {
   FETCH_MOVIES,
   FETCH_CAST,
   FETCH_LOADMORE,
-  FETCH_REFRESH
+  FETCH_REFRESH,
+  FETCH_CAST_DETEAL,
+  FETCH_MOVIES_BY_CAST,
+  SEARCH_MOVIE,
+  PLAY_VIDEO
 } from "./actionType";
 
 export const fetch_movie = page => {
@@ -29,5 +33,33 @@ export const fetch_loadmore = page => {
 export const fetch_refresh = () => {
   return {
     type: FETCH_REFRESH
+  };
+};
+
+export const fetch_detail_cast = personId => {
+  return {
+    type: FETCH_CAST_DETEAL,
+    personId: personId
+  };
+};
+
+export const fetch_list_movie_by_cast = castId => {
+  return {
+    type: FETCH_MOVIES_BY_CAST,
+    castId: castId
+  };
+};
+
+export const searchMovie = movie => {
+  return {
+    type: SEARCH_MOVIE,
+    movie: movie
+  };
+};
+
+export const playVideo = movieId => {
+  return {
+    type: PLAY_VIDEO,
+    movieId: movieId
   };
 };

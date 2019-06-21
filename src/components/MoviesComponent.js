@@ -4,18 +4,40 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  RefreshControl
+  RefreshControl,
+  TouchableNativeFeedback
 } from "react-native";
 import { connect } from "react-redux";
 import { fetch_movie, fetch_loadmore, fetch_refresh } from "../actions";
 import ItemMovieComponent from "./ItemMovieComponent";
+import Icon from "react-native-vector-icons/Ionicons";
+import { openDatabase } from "react-native-sqlite-storage";
 
+var db = openDatabase({ name: "MovieDatabase.db" });
 class MovieComponent extends Component {
   ITEM_MOVIE = "ITEM_MOVIE";
+
+  constructor(props) {
+    super(props);
+    db.transaction(function(txn) {
+      txn.executeSql(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='table_movie'",
+        [],
+        function(tx, res) {
+          if (res.rows.length === 0) {
+            txn.executeSql("DROP TABLE IF EXISTS table_movie", []);
+            txn.executeSql(
+              "CREATE TABLE IF NOT EXISTS table_movie(id INTEGER PRIMARY KEY, title TEXT, poster_path TEXT, popularity FLOAT, original_language TEXT, overview TEXT, backdrop_path TEXT)",
+              []
+            );
+          }
+        }
+      );
+    });
+  }
 
   componentDidMount() {
     this.props.fetch_movie(this.props.dataMovie.page);
@@ -23,6 +45,10 @@ class MovieComponent extends Component {
 
   _hanlderDetailNavigator = movie => {
     this.props.navigation.navigate("Detail", { ITEM_MOVIE: movie });
+  };
+
+  _hanlderSearchNavigator = () => {
+    this.props.navigation.navigate("Search");
   };
 
   _hanlderLoadMore = page => {
@@ -37,7 +63,6 @@ class MovieComponent extends Component {
 
   render() {
     const { dataMovie } = this.props;
-    console.log(dataMovie);
     return (
       <View style={styles.container}>
         {dataMovie.isFetching ? (
@@ -47,15 +72,22 @@ class MovieComponent extends Component {
           />
         ) : (
           <View style={styles.container}>
-            <View>
-              <Image
-                source={require("../image/icon.png")}
-                style={styles.info}
-              />
-              <View style={styles.containerInfor}>
-                <Text style={styles.textInfo}>Information</Text>
-              </View>
+            <View style={styles.containerInfor}>
+              <Text style={styles.textInfo}>Information</Text>
             </View>
+            <View style={{ alignItems: "flex-end" }}>
+              <TouchableNativeFeedback
+                onPress={() => this._hanlderSearchNavigator()}
+              >
+                <Icon
+                  name="ios-search"
+                  size={44}
+                  color={"black"}
+                  style={styles.info}
+                />
+              </TouchableNativeFeedback>
+            </View>
+
             <FlatList
               data={dataMovie.data}
               renderItem={({ item, index }) => {
@@ -92,19 +124,17 @@ const styles = StyleSheet.create({
     flex: 1
   },
   containerInfor: {
-    justifyContent: "center",
-    alignItems: "center",
+    flex: 1,
+    position: "absolute",
     margin: 16
   },
   info: {
-    height: 44,
-    width: 44,
-    margin: 8,
-    position: "absolute"
+    margin: 8
   },
   textInfo: {
     fontSize: 24,
     color: "black",
+
     fontWeight: "bold"
   }
 });
