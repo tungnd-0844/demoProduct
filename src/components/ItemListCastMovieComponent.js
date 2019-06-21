@@ -10,19 +10,16 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 
-export default class MovieComponent extends Component {
+export default class ItemListCastMovieComponent extends Component {
   render() {
     const { item } = this.props;
     const IMAGE_URL = "http://image.tmdb.org/t/p/w300";
-    var icon =
-      item.profile_path === null
-        ? require("../image/default.png")
-        : { uri: IMAGE_URL + item.profile_path };
     return (
       <View style={styles.container}>
         <Image
-          defaultSource={require("../image/icon.png")}
-          source={icon}
+          source={{
+            uri: IMAGE_URL + item.poster_path
+          }}
           style={styles.imagPath}
         />
         <View
@@ -32,8 +29,7 @@ export default class MovieComponent extends Component {
             alignSelf: "flex-end"
           }}
         >
-          <Text style={styles.textName}>{item.name}</Text>
-          <Text style={styles.textJob}>{item.job}</Text>
+          <Text style={styles.textName}>{item.title}</Text>
         </View>
       </View>
     );

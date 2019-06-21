@@ -2,7 +2,10 @@ import React from "react";
 import MoviesComponent from "./MoviesComponent";
 import FavouriteComponent from "./FavouriteComponent";
 import DetailMovieComponent from "./DetailMovieComponent";
+import CastDetailComponent from "./CastDetailComponent";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import SearchComponent from "./SearchComponent";
+import YoutubeComponent from "./YoutubeComponent";
 import {
   createBottomTabNavigator,
   createStackNavigator,
@@ -12,16 +15,41 @@ import {
 const MovieStack = createStackNavigator(
   {
     Movie: MoviesComponent,
-    Detail: DetailMovieComponent
+    Detail: DetailMovieComponent,
+    Youtube: {
+      screen: YoutubeComponent,
+      gestureResponseDistance: 250
+    },
+    CastDetail: CastDetailComponent,
+    Search: SearchComponent
   },
   {
-    headerMode: "none"
+    headerMode: "none",
+    mode: "modal",
+    cardStyle: {
+      backgroundColor: "transparent"
+    }
   }
 );
 
-const FavouriteStack = createStackNavigator({
-  Favourite: FavouriteComponent
-});
+const FavouriteStack = createStackNavigator(
+  {
+    Favourite: FavouriteComponent,
+    Detail: DetailMovieComponent,
+    Youtube: {
+      screen: YoutubeComponent,
+      gestureResponseDistance: 250
+    }
+  },
+  {
+    initialRoute: "Favourite",
+    headerMode: "none",
+    mode: "modal",
+    cardStyle: {
+      backgroundColor: "transparent"
+    }
+  }
+);
 
 const ButtomTabNavigator = createBottomTabNavigator(
   {
