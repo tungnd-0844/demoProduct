@@ -6,10 +6,15 @@ import CastDetailComponent from "./CastDetailComponent";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import SearchComponent from "./SearchComponent";
 import YoutubeComponent from "./YoutubeComponent";
+import LoginComponent from "./LoginComponent";
+import LoadingComponent from "./LoadingComponent";
+import AccountComponent from "./AccountComponent";
+import InformationComponent from "./InformationComponent";
 import {
   createBottomTabNavigator,
   createStackNavigator,
-  createAppContainer
+  createAppContainer,
+  createSwitchNavigator
 } from "react-navigation";
 
 const MovieStack = createStackNavigator(
@@ -51,10 +56,16 @@ const FavouriteStack = createStackNavigator(
   }
 );
 
+const AccountStack = createStackNavigator({
+  Account: AccountComponent,
+  Information: InformationComponent
+});
+
 const ButtomTabNavigator = createBottomTabNavigator(
   {
     Movie: MovieStack,
-    Favourite: FavouriteStack
+    Favourite: FavouriteStack,
+    Account: AccountStack
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -66,6 +77,8 @@ const ButtomTabNavigator = createBottomTabNavigator(
           iconName = `ios-videocam`;
         } else if (routeName === "Favourite") {
           iconName = `ios-star`;
+        } else if (routeName === "Account") {
+          iconName = `ios-contact`;
         }
         return <IconComponent name={iconName} size={25} color={tintColor} />;
       }
@@ -77,4 +90,16 @@ const ButtomTabNavigator = createBottomTabNavigator(
   }
 );
 
-export default createAppContainer(ButtomTabNavigator);
+const LoginStack = createSwitchNavigator(
+  {
+    Loading: LoadingComponent,
+    Login: LoginComponent,
+    Main: ButtomTabNavigator
+  },
+  {
+    headerMode: "none",
+    initialRouteName: "Loading"
+  }
+);
+
+export default createAppContainer(LoginStack);

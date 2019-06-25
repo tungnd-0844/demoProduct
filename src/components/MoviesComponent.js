@@ -15,6 +15,7 @@ import { fetch_movie, fetch_loadmore, fetch_refresh } from "../actions";
 import ItemMovieComponent from "./ItemMovieComponent";
 import Icon from "react-native-vector-icons/Ionicons";
 import { openDatabase } from "react-native-sqlite-storage";
+import firebase from "react-native-firebase";
 
 var db = openDatabase({ name: "MovieDatabase.db" });
 class MovieComponent extends Component {
@@ -22,6 +23,9 @@ class MovieComponent extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      currentUser: null
+    };
     db.transaction(function(txn) {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='table_movie'",
@@ -41,6 +45,8 @@ class MovieComponent extends Component {
 
   componentDidMount() {
     this.props.fetch_movie(this.props.dataMovie.page);
+    const { currentUser } = firebase.auth();
+    this.setState({ currentUser });
   }
 
   _hanlderDetailNavigator = movie => {
@@ -63,6 +69,7 @@ class MovieComponent extends Component {
 
   render() {
     const { dataMovie } = this.props;
+    console.log(this.state.currentUser);
     return (
       <View style={styles.container}>
         {dataMovie.isFetching ? (
