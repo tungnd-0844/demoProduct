@@ -24,12 +24,18 @@ import {
   SEARCH_MOVIE_SUCEESS,
   PLAY_VIDEO,
   PLAY_VIDEO_FAIL,
-  PLAY_VIDEO_SUCEESS
+  PLAY_VIDEO_SUCEESS,
+  FETCH_GENRE_MOVIES,
+  FETCH_GENRE_MOVIES_FAIL,
+  FETCH_GENRE_MOVIES_SUCEESS,
+  FETCH_TRENDING_MOVIES,
+  FETCH_TRENDING_MOVIES_SUCEESS,
+  FETCH_TRENDING_MOVIES_FAIL
 } from "../actions/actionType";
 
-function* fetchData() {
+function* fetchData(action) {
   try {
-    const data = yield APIs.fetchMovie();
+    const data = yield APIs.fetchMovie(action.genre);
     yield put({ type: FETCH_MOVIES_SUCEESS, data });
   } catch (e) {
     yield put({ type: FETCH_MOVIES_FAIL, e });
@@ -47,16 +53,16 @@ function* fetchCast(action) {
 
 function* fetchLoadmoreMovie(action) {
   try {
-    const data = yield APIs.fetchLoadMoreMovie(action.page);
+    const data = yield APIs.fetchLoadMoreMovie(action.page, action.genre);
     yield put({ type: FETCH_LOADMORE_SUCEESS, data });
   } catch (e) {
     yield put({ type: FETCH_LOADMORE_FAIL, e });
   }
 }
 
-function* fetchRefreshMovie() {
+function* fetchRefreshMovie(action) {
   try {
-    const data = yield APIs.fetchMovie();
+    const data = yield APIs.fetchMovie(action.genre);
     yield put({ type: FETCH_REFRESH_SUCEESS, data });
   } catch (e) {
     yield put({ type: FETCH_REFRESH_FAIL, e });
@@ -98,6 +104,17 @@ function* playVideo(action) {
     yield put({ type: PLAY_VIDEO_FAIL, e });
   }
 }
+var data = [];
+function* fetchGenreMovie(action) {
+  try {
+    const arr = yield APIs.fetchGenreMovie(action.genre);
+    data.push({ genre: action.genre, arr: arr });
+    const dataTrending = yield APIs.fetchTrending();
+    yield put({ type: FETCH_GENRE_MOVIES_SUCEESS, data, dataTrending });
+  } catch (e) {
+    yield put({ type: FETCH_GENRE_MOVIES_FAIL, e });
+  }
+}
 
 function* dataSaga() {
   yield takeEvery(FETCH_MOVIES, fetchData);
@@ -108,6 +125,7 @@ function* dataSaga() {
   yield takeEvery(FETCH_MOVIES_BY_CAST, fetchListCastDetailMovie);
   yield takeLatest(SEARCH_MOVIE, searchMovie);
   yield takeEvery(PLAY_VIDEO, playVideo);
+  yield takeEvery(FETCH_GENRE_MOVIES, fetchGenreMovie);
 }
 
 export default dataSaga;

@@ -6,13 +6,15 @@ import {
   FETCH_CAST_DETEAL,
   FETCH_MOVIES_BY_CAST,
   SEARCH_MOVIE,
-  PLAY_VIDEO
+  PLAY_VIDEO,
+  FETCH_GENRE_MOVIES,
+  FETCH_TRENDING_MOVIES
 } from "./actionType";
 
-export const fetch_movie = page => {
+export const fetch_movie = genre => {
   return {
     type: FETCH_MOVIES,
-    page: page
+    genre: genre
   };
 };
 
@@ -23,16 +25,18 @@ export const fetch_cast = movieId => {
   };
 };
 
-export const fetch_loadmore = page => {
+export const fetch_loadmore = (page, genre) => {
   return {
     type: FETCH_LOADMORE,
-    page: page
+    page: page,
+    genre: genre
   };
 };
 
-export const fetch_refresh = () => {
+export const fetch_refresh = genre => {
   return {
-    type: FETCH_REFRESH
+    type: FETCH_REFRESH,
+    genre: genre
   };
 };
 
@@ -61,5 +65,18 @@ export const playVideo = movieId => {
   return {
     type: PLAY_VIDEO,
     movieId: movieId
+  };
+};
+
+export const fetch_genre_movie = genre => {
+  return {
+    type: FETCH_GENRE_MOVIES,
+    genre: genre
+  };
+};
+
+export const fetch_trending_movie = () => {
+  return {
+    type: FETCH_TRENDING_MOVIES
   };
 };

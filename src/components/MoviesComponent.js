@@ -8,22 +8,32 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  Image,
+  Dimensions,
   TouchableNativeFeedback
 } from "react-native";
 import { connect } from "react-redux";
-import { fetch_movie, fetch_loadmore, fetch_refresh } from "../actions";
+import {
+  fetch_movie,
+  fetch_loadmore,
+  fetch_refresh,
+  fetch_trending_movie
+} from "../actions";
 import ItemMovieComponent from "./ItemMovieComponent";
 import Icon from "react-native-vector-icons/Ionicons";
 import { openDatabase } from "react-native-sqlite-storage";
 import firebase from "react-native-firebase";
 
 var db = openDatabase({ name: "MovieDatabase.db" });
+const IMAGE_URL = "http://image.tmdb.org/t/p/w300";
+const width = Dimensions.get("window").width;
 class MovieComponent extends Component {
   ITEM_MOVIE = "ITEM_MOVIE";
 
   constructor(props) {
     super(props);
     this.state = {
+      genre: this.props.navigation.state.params.GENRE,
       currentUser: null
     };
     db.transaction(function(txn) {
@@ -43,10 +53,16 @@ class MovieComponent extends Component {
     });
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.state.params.GENRE.toUpperCase()
+    };
+  };
+
   componentDidMount() {
-    this.props.fetch_movie(this.props.dataMovie.page);
     const { currentUser } = firebase.auth();
     this.setState({ currentUser });
+    this.props.fetch_movie(this.state.genre);
   }
 
   _hanlderDetailNavigator = movie => {
@@ -58,7 +74,7 @@ class MovieComponent extends Component {
   };
 
   _hanlderLoadMore = page => {
-    this.props.fetch_loadmore(page);
+    this.props.fetch_loadmore(page, this.state.genre);
   };
 
   _renderFooter = () => {
@@ -69,7 +85,6 @@ class MovieComponent extends Component {
 
   render() {
     const { dataMovie } = this.props;
-    console.log(this.state.currentUser);
     return (
       <View style={styles.container}>
         {dataMovie.isFetching ? (
@@ -79,22 +94,6 @@ class MovieComponent extends Component {
           />
         ) : (
           <View style={styles.container}>
-            <View style={styles.containerInfor}>
-              <Text style={styles.textInfo}>Information</Text>
-            </View>
-            <View style={{ alignItems: "flex-end" }}>
-              <TouchableNativeFeedback
-                onPress={() => this._hanlderSearchNavigator()}
-              >
-                <Icon
-                  name="ios-search"
-                  size={44}
-                  color={"black"}
-                  style={styles.info}
-                />
-              </TouchableNativeFeedback>
-            </View>
-
             <FlatList
               data={dataMovie.data}
               renderItem={({ item, index }) => {
@@ -114,7 +113,7 @@ class MovieComponent extends Component {
               ListFooterComponent={() => this._renderFooter()}
               refreshControl={
                 <RefreshControl
-                  onRefresh={() => this.props.fetch_refresh()}
+                  onRefresh={() => this.props.fetch_refresh(this.state.genre)}
                   refreshing={dataMovie.isRefreshing}
                 />
               }
@@ -130,10 +129,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  containerImage: {
+    width: "100%",
+    height: 400,
+    flexDirection: "row",
+    margin: 8
+  },
+  imagPath: {
+    width: "100%",
+    height: 250,
+    position: "absolute"
+  },
+  textName: {
+    color: "white",
+    fontSize: 18,
+    marginLeft: 6
+  },
   containerInfor: {
     flex: 1,
     position: "absolute",
-    margin: 16
+    margin: 8
   },
   info: {
     margin: 8
@@ -153,9 +168,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetch_movie: page => dispatch(fetch_movie(page)),
-    fetch_loadmore: page => dispatch(fetch_loadmore(page)),
-    fetch_refresh: () => dispatch(fetch_refresh())
+    fetch_movie: genre => dispatch(fetch_movie(genre)),
+    fetch_loadmore: (page, genre) => dispatch(fetch_loadmore(page, genre)),
+    fetch_refresh: genre => dispatch(fetch_refresh(genre))
   };
 };
 
