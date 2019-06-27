@@ -10,8 +10,14 @@ export default class YoutubeComponent extends Component {
       id: this.props.navigation.state.params.VIDEO
     };
   }
+
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: null
+    };
+  };
+  
   render() {
-    console.log(this.state.id);
     return (
       <View
         style={{

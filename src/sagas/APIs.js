@@ -3,18 +3,18 @@ const MOVIE_PATH = "https://api.themoviedb.org/3/movie/";
 const CAST_PATH = "https://api.themoviedb.org/3/";
 const API_KEY = "3956f50a726a2f785334c24759b97dc6";
 
-const fetchMovie = () => {
+const fetchMovie = genre => {
   return axios
-    .get(MOVIE_PATH + `popular?api_key=${API_KEY}&page=1`)
+    .get(MOVIE_PATH + `${genre}?api_key=${API_KEY}&page=1`)
     .then(response => response.data.results)
     .catch(error => {
       console.log(error);
     });
 };
 
-const fetchLoadMoreMovie = page => {
+const fetchLoadMoreMovie = (page, genre) => {
   return axios
-    .get(MOVIE_PATH + `popular?api_key=${API_KEY}&page=${page}`)
+    .get(MOVIE_PATH + `${genre}?api_key=${API_KEY}&page=${page}`)
     .then(response => response.data.results)
     .catch(error => {
       console.log(error);
@@ -71,6 +71,24 @@ const playVideo = movieId => {
     });
 };
 
+const fetchGenreMovie = genre => {
+  return axios
+    .get(MOVIE_PATH + `${genre}?api_key=${API_KEY}&page=1`)
+    .then(response => response.data.results)
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+const fetchTrending = () => {
+  return axios
+    .get(CAST_PATH + `trending/all/day?api_key=${API_KEY}`)
+    .then(response => response.data.results)
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const APIs = {
   fetchMovie,
   fetchCastMovie,
@@ -78,5 +96,7 @@ export const APIs = {
   fetchCastDetailMovie,
   fetchListCastDetailMovie,
   searchMovie,
-  playVideo
+  playVideo,
+  fetchGenreMovie,
+  fetchTrending
 };

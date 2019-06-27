@@ -13,6 +13,7 @@ import {
 const initialState = {
   data: [],
   page: 1,
+  genre: "",
   isFetching: false,
   isLoadmore: false,
   isRefreshing: false
@@ -24,11 +25,13 @@ const dataReducers = (state = initialState, action) => {
       return {
         ...state,
         isFetching: true,
+        genre: action.genre,
         page: state.page + 1
       };
     case FETCH_MOVIES_SUCEESS:
       return {
         ...state,
+        dataTrending: action.dataTrending,
         isFetching: false,
         data: action.data
       };
@@ -41,10 +44,12 @@ const dataReducers = (state = initialState, action) => {
       return {
         ...state,
         page: state.page + 1,
+        genre: action.genre,
         isLoadmore: true
       };
     case FETCH_LOADMORE_SUCEESS:
       return {
+        ...state,
         data: [...state.data, ...action.data],
         isLoadmore: false,
         page: state.page
@@ -53,12 +58,14 @@ const dataReducers = (state = initialState, action) => {
       return {
         ...state,
         page: 1,
+        genre: action.genre,
         isRefreshing: true
       };
     case FETCH_REFRESH_SUCEESS:
       return {
         ...state,
         isRefreshing: false,
+        // isFetching: false,
         data: action.data,
         page: state.page + 1
       };

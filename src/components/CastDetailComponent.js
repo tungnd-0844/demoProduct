@@ -21,6 +21,12 @@ class CastDetailComponent extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: null
+    };
+  };
+
   componentDidMount() {
     this.props.fetch_detail_cast(this.state.castDetail.id);
     this.props.fetch_list_movie_by_cast(this.state.castDetail.id);

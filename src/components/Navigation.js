@@ -10,6 +10,7 @@ import LoginComponent from "./LoginComponent";
 import LoadingComponent from "./LoadingComponent";
 import AccountComponent from "./AccountComponent";
 import InformationComponent from "./InformationComponent";
+import GenreComponent from "./GenreComponent";
 import {
   createBottomTabNavigator,
   createStackNavigator,
@@ -19,6 +20,7 @@ import {
 
 const MovieStack = createStackNavigator(
   {
+    Genre: GenreComponent,
     Movie: MoviesComponent,
     Detail: DetailMovieComponent,
     Youtube: {
@@ -29,7 +31,7 @@ const MovieStack = createStackNavigator(
     Search: SearchComponent
   },
   {
-    headerMode: "none",
+   // headerMode: "none",
     mode: "modal",
     cardStyle: {
       backgroundColor: "transparent"
@@ -65,7 +67,7 @@ const ButtomTabNavigator = createBottomTabNavigator(
   {
     Movie: MovieStack,
     Favourite: FavouriteStack,
-    Account: AccountStack
+    Information: AccountStack
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -77,7 +79,7 @@ const ButtomTabNavigator = createBottomTabNavigator(
           iconName = `ios-videocam`;
         } else if (routeName === "Favourite") {
           iconName = `ios-star`;
-        } else if (routeName === "Account") {
+        } else if (routeName === "Information") {
           iconName = `ios-contact`;
         }
         return <IconComponent name={iconName} size={25} color={tintColor} />;

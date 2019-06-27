@@ -17,10 +17,6 @@ export default class CustomMenuIcon extends Component {
   hideMenu = () => {
     this._menu.hide();
   };
-  optionInformationClick = () => {
-    this._menu.hide();
-    this.props.optionInformationClick();
-  };
   optionLogoutClick = () => {
     this._menu.hide();
     this.props.optionLogoutClick();
@@ -40,7 +36,6 @@ export default class CustomMenuIcon extends Component {
             </TouchableOpacity>
           }
         >
-          <MenuItem onPress={this.optionInformationClick}>Information</MenuItem>
           <MenuItem onPress={this.optionLogoutClick}>Logout</MenuItem>
         </Menu>
       </View>

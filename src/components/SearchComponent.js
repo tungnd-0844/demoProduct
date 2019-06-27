@@ -19,6 +19,12 @@ class SearchComponent extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: null
+    };
+  };
+
   _hanlderDetailNavigator = movie => {
     this.props.navigation.navigate("Detail", { ITEM_MOVIE: movie });
   };

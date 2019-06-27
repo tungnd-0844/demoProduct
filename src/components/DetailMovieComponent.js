@@ -24,6 +24,11 @@ var db = openDatabase({ name: "MovieDatabase.db" });
 const IMAGE_URL = "http://image.tmdb.org/t/p/w300";
 mounted = false;
 class DetailMovieComponent extends Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: null
+    };
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -219,7 +224,7 @@ class DetailMovieComponent extends Component {
                 />
               </View>
               <Text style={{ fontWeight: "bold", color: "black" }}>
-                TRAINER
+                TRAILER
               </Text>
             </TouchableOpacity>
             {this.state.favorite ? (

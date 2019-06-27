@@ -112,10 +112,17 @@ const styles = StyleSheet.create({
     borderColor: "gray"
   },
   button: {
+    display: "flex",
     width: 100,
-    height: 40,
+    height: 50,
+    borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 30
+
+    backgroundColor: "#2AC062",
+    shadowColor: "#2AC062",
+    shadowOpacity: 0.4,
+    shadowOffset: { height: 10, width: 0 },
+    shadowRadius: 20
   }
 });
