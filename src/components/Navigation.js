@@ -11,6 +11,7 @@ import LoadingComponent from "./LoadingComponent";
 import AccountComponent from "./AccountComponent";
 import InformationComponent from "./InformationComponent";
 import GenreComponent from "./GenreComponent";
+import CommentComponent from "./CommentComponent";
 import {
   createBottomTabNavigator,
   createStackNavigator,
@@ -23,6 +24,7 @@ const MovieStack = createStackNavigator(
     Genre: GenreComponent,
     Movie: MoviesComponent,
     Detail: DetailMovieComponent,
+    Comment: CommentComponent,
     Youtube: {
       screen: YoutubeComponent,
       gestureResponseDistance: 250
@@ -31,7 +33,7 @@ const MovieStack = createStackNavigator(
     Search: SearchComponent
   },
   {
-   // headerMode: "none",
+    // headerMode: "none",
     mode: "modal",
     cardStyle: {
       backgroundColor: "transparent"
@@ -50,7 +52,7 @@ const FavouriteStack = createStackNavigator(
   },
   {
     initialRoute: "Favourite",
-    headerMode: "none",
+    // headerMode: "none",
     mode: "modal",
     cardStyle: {
       backgroundColor: "transparent"

@@ -89,6 +89,15 @@ const fetchTrending = () => {
     });
 };
 
+const fetchComment = id => {
+  return axios
+    .get(MOVIE_PATH + `${id}/reviews?api_key=${API_KEY}`)
+    .then(response => response.data.results)
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const APIs = {
   fetchMovie,
   fetchCastMovie,
@@ -98,5 +107,6 @@ export const APIs = {
   searchMovie,
   playVideo,
   fetchGenreMovie,
-  fetchTrending
+  fetchTrending,
+  fetchComment
 };

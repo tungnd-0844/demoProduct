@@ -8,15 +8,13 @@ import {
   Image,
   FlatList,
   ToastAndroid,
-  ScrollView,
-  SafeAreaView
+  ScrollView
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import { connect } from "react-redux";
 import { fetch_cast, playVideo } from "../actions";
 import CastComponent from "./CastComponent";
-import YouTube from "react-native-youtube";
 import { openDatabase } from "react-native-sqlite-storage";
 
 var db = openDatabase({ name: "MovieDatabase.db" });
@@ -58,7 +56,6 @@ class DetailMovieComponent extends Component {
   }
 
   setModalVisible(visible) {
-    console.log(visible);
     this.setState({ modalVisible: visible });
   }
 
@@ -173,6 +170,18 @@ class DetailMovieComponent extends Component {
                   <Icon name="ios-star" size={25} />
                   <Text style={{ marginLeft: 8 }}>{movie.popularity}</Text>
                 </View>
+                <TouchableOpacity
+                  style={[styles.containerDetail, { marginLeft: 16 }]}
+                  onPress={() =>
+                    navigation.navigate("Comment", {
+                      ID: this.state.movie.id,
+                      TITLE: movie.title
+                    })
+                  }
+                >
+                  <MaterialIcon name="comment" size={25} />
+                  <Text style={{ marginLeft: 8 }}>Comment</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
