@@ -62,12 +62,13 @@ class GenreComponent extends Component {
 
   render() {
     const { dataGenre } = this.props;
+    var dataTrending = dataGenre.dataTrending.slice(0, 5);
     return (
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.containerSlider}>
             <Carousel
-              data={dataGenre.dataTrending}
+              data={dataTrending}
               renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity
@@ -75,7 +76,7 @@ class GenreComponent extends Component {
                     onPress={() => this._hanlderDetailNavigator(item)}
                   >
                     <Image
-                      source={{ uri: IMAGE_URL + item.poster_path }}
+                      source={{ uri: IMAGE_URL + item.backdrop_path }}
                       style={styles.imagPath}
                     />
 

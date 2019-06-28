@@ -30,6 +30,12 @@ export default class FavouriteComponent extends Component {
     });
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Favourite"
+    };
+  };
+
   getAllMovies() {
     db.transaction(tx => {
       tx.executeSql("SELECT * FROM table_movie", [], (tx, results) => {
@@ -45,7 +51,7 @@ export default class FavouriteComponent extends Component {
   }
 
   _hanlderDetailNavigator = movie => {
-      this.props.navigation.navigate("Detail", { ITEM_MOVIE: movie });
+    this.props.navigation.navigate("Detail", { ITEM_MOVIE: movie });
   };
 
   componentDidMount() {
@@ -62,7 +68,6 @@ export default class FavouriteComponent extends Component {
   render() {
     return (
       <View>
-        <Text style={styles.textFavo}>Favourite</Text>
         <FlatList
           data={this.state.favorites}
           renderItem={({ item, index }) => {

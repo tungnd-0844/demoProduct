@@ -30,7 +30,10 @@ import {
   FETCH_GENRE_MOVIES_SUCEESS,
   FETCH_TRENDING_MOVIES,
   FETCH_TRENDING_MOVIES_SUCEESS,
-  FETCH_TRENDING_MOVIES_FAIL
+  FETCH_TRENDING_MOVIES_FAIL,
+  FETCH_COMMENT_MOVIES,
+  FETCH_COMMENT_MOVIES_FAIL,
+  FETCH_COMMENT_MOVIES_SUCEESS
 } from "../actions/actionType";
 
 function* fetchData(action) {
@@ -104,6 +107,7 @@ function* playVideo(action) {
     yield put({ type: PLAY_VIDEO_FAIL, e });
   }
 }
+
 var data = [];
 function* fetchGenreMovie(action) {
   try {
@@ -113,6 +117,15 @@ function* fetchGenreMovie(action) {
     yield put({ type: FETCH_GENRE_MOVIES_SUCEESS, data, dataTrending });
   } catch (e) {
     yield put({ type: FETCH_GENRE_MOVIES_FAIL, e });
+  }
+}
+
+function* fetchComment(action) {
+  try {
+    const data = yield APIs.fetchComment(action.id);
+    yield put({ type: FETCH_COMMENT_MOVIES_SUCEESS, data });
+  } catch (e) {
+    yield put({ type: FETCH_COMMENT_MOVIES_FAIL, e });
   }
 }
 
@@ -126,6 +139,7 @@ function* dataSaga() {
   yield takeLatest(SEARCH_MOVIE, searchMovie);
   yield takeEvery(PLAY_VIDEO, playVideo);
   yield takeEvery(FETCH_GENRE_MOVIES, fetchGenreMovie);
+  yield takeEvery(FETCH_COMMENT_MOVIES, fetchComment);
 }
 
 export default dataSaga;

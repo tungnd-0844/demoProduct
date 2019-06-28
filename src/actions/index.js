@@ -8,7 +8,8 @@ import {
   SEARCH_MOVIE,
   PLAY_VIDEO,
   FETCH_GENRE_MOVIES,
-  FETCH_TRENDING_MOVIES
+  FETCH_TRENDING_MOVIES,
+  FETCH_COMMENT_MOVIES
 } from "./actionType";
 
 export const fetch_movie = genre => {
@@ -78,5 +79,12 @@ export const fetch_genre_movie = genre => {
 export const fetch_trending_movie = () => {
   return {
     type: FETCH_TRENDING_MOVIES
+  };
+};
+
+export const fetch_comment_movie = id => {
+  return {
+    type: FETCH_COMMENT_MOVIES,
+    id: id
   };
 };
